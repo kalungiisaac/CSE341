@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const MongoClient = require('mongodb').MongoClient;
 const mongodb = require('./db/connect');
 const professionalRoutes = require('./routes/professional');
@@ -16,13 +17,9 @@ app
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
   })
+  .use(express.static(path.join(__dirname, '../frontend')))
   .use('/professional', professionalRoutes)
   .use('/contacts', contactsRoutes);
-
-// Root route handler to avoid 'Cannot GET /'
-app.get('/', (req, res) => {
-  res.send('Welcome to the Contacts API. Access contacts at <a href="/contacts">/contacts</a>.');
-});
 
 mongodb.initDb((err, mongodbInstance) => {
   if (err) {

@@ -1,4 +1,7 @@
 // helpful link for converting image to base64: https://elmah.io/tools/base64-image-encoder/
+const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+const baseUrl = isLocal && window.location.port !== '8080' ? 'http://localhost:8080' : '';
+
 async function apiFetch(url) {
   const response = await fetch(url);
   const data = await response.json();
@@ -6,8 +9,14 @@ async function apiFetch(url) {
 }
 
 const getData = async () => {
-  const data = await apiFetch('http://localhost:8080/professional');
-  displayAllData(data);
+  try {
+    const data = await apiFetch(`${baseUrl}/professional`);
+    displayAllData(data);
+  } catch (error) {
+    console.error('Failed to fetch data:', error);
+    document.querySelector('.about').innerHTML = 
+      '<h2 style="color: #ff6b6b; text-align: center; padding: 2rem;">⚠️ Could not load data. Make sure the backend server is running on port 8080.</h2>';
+  }
 };
 
 function displayAllData(data) {

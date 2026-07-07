@@ -1,11 +1,11 @@
 {
-  "name": "cse341",
+  "name": "cse341-contacts",
   "version": "1.0.0",
-  "description": "",
+  "description": "CSE341 Contacts Project Part 1",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -15,6 +15,15 @@
   "author": "",
   "license": "ISC",
   "type": "commonjs",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^17.4.2",
+    "express": "^4.16.3",
+    "mongodb": "^7.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
   "bugs": {
     "url": "https://github.com/kalungiisaac/CSE341/issues"
   },
