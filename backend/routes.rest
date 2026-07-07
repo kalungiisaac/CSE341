@@ -1,0 +1,12 @@
+### Get all contacts
+GET http://localhost:8080/contacts
+
+###
+
+### Get a single contact by ID
+GET http://localhost:8080/contacts/6a4cb17dcf312847caf532fa
+
+###
+
+### Professional data (existing)
+GET http://localhost:8080/professional
