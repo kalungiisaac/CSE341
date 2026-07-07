@@ -5,7 +5,7 @@ const path = require('path');
 const getData = async (req, res, next) => {
   try {
     const db = mongodb.getDb();
-    const lists = await db.db().collection('user').find().toArray();
+    const lists = await db.db('cse341').collection('user').find().toArray();
     if (lists && lists.length > 0) {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(lists[0]);
