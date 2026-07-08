@@ -1,5 +1,5 @@
 /**
- * database.js — Frontend data access module
+ * database.js -Frontend data access module
  * 
  * Centralizes all fetch calls to the live MongoDB-backed API endpoints.
  * The backend (controllers/professional.js & controllers/contacts.js)
@@ -27,9 +27,8 @@ async function apiFetch(endpoint) {
   return response.json();
 }
 
-/* ───────────────────────────────────────────
- *  Professional data  (MongoDB → cse341.user)
- * ─────────────────────────────────────────── */
+
+ // Professional data  (MongoDB cse341.user)
 
 /**
  * Fetch the professional profile from the live database.

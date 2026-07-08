@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "1",
+    "firstName": "Kalungi",
+    "lastName": "Isaac",
+    "email": "kalkatelo@gmail.com",
+    "favoriteColor": "Blue",
+    "birthday": "1999-05-15"
+  },
+  {
+    "_id": "2",
+    "firstName": "Jane",
+    "lastName": "Namukasa",
+    "email": "janenamukasa@gmail.com",
+    "favoriteColor": "Green",
+    "birthday": "1998-08-22"
+  },
+  {
+    "_id": "3",
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "johnith@outlook.com",
+    "favoriteColor": "Red",
+    "birthday": "2000-01-10"
+  }
+]

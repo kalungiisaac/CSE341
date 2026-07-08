@@ -25,6 +25,13 @@ const contacts = [
     email: 'johnith@outlook.com',
     favoriteColor: 'Red',
     birthday: '2000-01-10'
+  },
+  {
+    firstName: 'Lujja',
+    lastName: 'Emma',
+    email: 'lujja24@outlook.com',
+    favoriteColor: 'Red',
+    birthday: '2007-01-10'
   }
 ];
 
@@ -36,7 +43,7 @@ async function seed() {
     const db = client.db('cse341');
     const collection = db.collection('contacts');
 
-    // Clear existing contacts (optional — remove this line if you want to keep old data)
+    // Clear existing contacts if old data exists.
     await collection.deleteMany({});
 
     const result = await collection.insertMany(contacts);

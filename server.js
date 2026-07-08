@@ -21,7 +21,7 @@ app
 // Initialize DB and start server
 mongodb.initDb((err, mongodbInstance) => {
   if (err) {
-    console.warn('Warning: Could not connect to MongoDB Atlas.');
+    console.warn('Warning: Could not connect to MongoDB Atlas. Continuing with fallback data.');
     console.error(err);
   } else {
     console.log('Connected to MongoDB Atlas successfully.');
