@@ -10,7 +10,7 @@ const contacts = [
     lastName: 'Isaac',
     email: 'kalkatelo@gmail.com',
     favoriteColor: 'Blue',
-    birthday: '1999-05-15'
+    birthday: '1999-05-15'  
   },
   {
     firstName: 'Jane',
@@ -21,7 +21,7 @@ const contacts = [
   },
   {
     firstName: 'John',
-    lastName: 'Smith',
+    lastName: 'Sekitto',
     email: 'johnith@outlook.com',
     favoriteColor: 'Red',
     birthday: '2000-01-10'

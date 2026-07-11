@@ -15,7 +15,7 @@ const BASE_URL =
   isLocal && window.location.port !== '8080' ? 'http://localhost:8080' : '';
 
 /**
- * Generic fetch helper – calls the API and returns parsed JSON.
+ * Generic fetch helper -calls the API and returns parsed JSON.
  * Throws on non-OK responses so callers can handle errors uniformly.
  */
 async function apiFetch(endpoint) {

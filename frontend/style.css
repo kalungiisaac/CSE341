@@ -28,9 +28,10 @@
   box-sizing: border-box;
 }
 
-#fone::after {
-  content: "☎️";
-  height: 2rem;
+#fone {
+  content: "";
+  background-image: url("https://www.svgrepo.com/show/258875/phone-call-phone.svg");
+  height: 100%;
   width: 2rem;
 }
 
