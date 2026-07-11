@@ -1,12 +1,38 @@
 ### Get all contacts
 GET http://localhost:8080/contacts
 
-###
-
 ### Get a single contact by ID
 GET http://localhost:8080/contacts/6a4cb17dcf312847caf532fa
 
-###
+### Create a new contact
+POST http://localhost:8080/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "test.user@example.com",
+  "favoriteColor": "Violet",
+  "birthday": "1990-01-01"
+}
+
+### Update a contact
+PUT http://localhost:8080/contacts/{{contactId}}
+Content-Type: application/json
+
+{
+  "firstName": "Updated",
+  "lastName": "User",
+  "email": "updated.user@example.com",
+  "favoriteColor": "Teal",
+  "birthday": "1990-01-02"
+}
+
+### Delete a contact
+DELETE http://localhost:8080/contacts/{{contactId}}
+
+### Swagger documentation
+GET http://localhost:8080/api-docs
 
 ### Professional data (existing)
 GET http://localhost:8080/professional

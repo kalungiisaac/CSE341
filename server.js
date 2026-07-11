@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const mongodb = require('./db/connect');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 const routes = require('./routes');
 
 const port = process.env.PORT || 8080;
@@ -16,6 +18,7 @@ app
     next();
   })
   .use(express.static(path.join(__dirname, 'frontend')))
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use('/', routes);
 
 // Initialize DB and start server
