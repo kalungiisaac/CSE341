@@ -4,7 +4,6 @@
 const contactsGrid = document.getElementById('contactsGrid');
 const loadingState = document.getElementById('loadingState');
 const errorState = document.getElementById('errorState');
-const addContactBtn = document.getElementById('addContactBtn');
 
 // Color name → CSS color mapping for the swatch
 const COLOR_MAP = {
@@ -111,11 +110,6 @@ async function loadContacts() {
     errorState.style.display = 'block';
   }
 }
-
-// Add Contact button click handler
-addContactBtn.addEventListener('click', () => {
-  alert('Add Contact is coming soon!😎');
-});
 
 // Kick off
 loadContacts();
