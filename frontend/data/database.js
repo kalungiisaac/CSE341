@@ -15,16 +15,33 @@ const BASE_URL =
   isLocal && window.location.port !== '8080' ? 'http://localhost:8080' : '';
 
 /**
- * Generic fetch helper -calls the API and returns parsed JSON.
+ * Generic fetch helper -calls the API and returns parsed JSON or text.
  * Throws on non-OK responses so callers can handle errors uniformly.
  */
-async function apiFetch(endpoint) {
+async function apiFetch(endpoint, options = {}) {
   const url = `${BASE_URL}${endpoint}`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`API error ${response.status}: ${response.statusText}`);
+  const response = await fetch(url, {
+    headers: {
+      'Accept': 'application/json',
+      ...(options.body ? { 'Content-Type': 'application/json' } : {}),
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
+
+  if (response.status === 204) {
+    return null;
   }
-  return response.json();
+
+  const contentType = response.headers.get('content-type') || '';
+  const data = contentType.includes('application/json') ? await response.json() : await response.text();
+
+  if (!response.ok) {
+    const message = typeof data === 'object' && data !== null ? data.message : data;
+    throw new Error(message || `API error ${response.status}: ${response.statusText}`);
+  }
+
+  return data;
 }
 
 
@@ -62,10 +79,24 @@ async function getContactById(id) {
   return apiFetch(`/contacts/${id}`);
 }
 
+/**
+ * Create a new contact through the live API.
+ * Endpoint: POST /contacts
+ * @param {Object} contact - Contact payload
+ * @returns {Promise<Object>} API response payload
+ */
+async function createContact(contact) {
+  return apiFetch('/contacts', {
+    method: 'POST',
+    body: JSON.stringify(contact),
+  });
+}
+
 /* ── Export as a single object for easy access ── */
 // Using a global so it works in plain <script> tags (no bundler needed).
 window.Database = {
   getProfessionalData,
   getAllContacts,
   getContactById,
+  createContact,
 };

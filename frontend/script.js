@@ -4,6 +4,10 @@
 const contactsGrid = document.getElementById('contactsGrid');
 const loadingState = document.getElementById('loadingState');
 const errorState = document.getElementById('errorState');
+const toggleContactFormButton = document.getElementById('toggleContactForm');
+const contactForm = document.getElementById('contactForm');
+const cancelContactFormButton = document.getElementById('cancelContactForm');
+const formMessage = document.getElementById('formMessage');
 
 // Color name → CSS color mapping for the swatch
 const COLOR_MAP = {
@@ -95,6 +99,7 @@ async function loadContacts() {
 
     // Hide loading, show grid
     loadingState.style.display = 'none';
+    errorState.style.display = 'none';
 
     if (!contacts || contacts.length === 0) {
       errorState.querySelector('h2').textContent = 'No contacts found';
@@ -110,6 +115,44 @@ async function loadContacts() {
     errorState.style.display = 'block';
   }
 }
+
+function toggleContactForm(show) {
+  contactForm.style.display = show ? 'block' : 'none';
+  toggleContactFormButton.textContent = show ? 'Hide Form' : '+ Add Contact';
+  if (!show) {
+    contactForm.reset();
+    formMessage.textContent = '';
+    formMessage.className = 'form-message';
+  }
+}
+
+async function handleAddContact(event) {
+  event.preventDefault();
+  const formData = new FormData(contactForm);
+  const contact = Object.fromEntries(formData.entries());
+
+  try {
+    formMessage.textContent = 'Saving contact...';
+    formMessage.className = 'form-message';
+    await Database.createContact(contact);
+    toggleContactForm(false);
+    await loadContacts();
+    formMessage.textContent = 'Contact added successfully.';
+    formMessage.className = 'form-message success';
+  } catch (error) {
+    console.error('Failed to add contact:', error);
+    formMessage.textContent = error.message || 'Unable to add contact.';
+    formMessage.className = 'form-message error';
+  }
+}
+
+toggleContactFormButton.addEventListener('click', () => {
+  const isVisible = contactForm.style.display === 'block';
+  toggleContactForm(!isVisible);
+});
+
+cancelContactFormButton.addEventListener('click', () => toggleContactForm(false));
+contactForm.addEventListener('submit', handleAddContact);
 
 // Kick off
 loadContacts();

@@ -33,6 +33,42 @@
         </header>
 
         <main class="content">
+            <div class="toolbar">
+                <button id="toggleContactForm" class="primary-btn" type="button">+ Add Contact</button>
+                <p id="formMessage" class="form-message" aria-live="polite"></p>
+            </div>
+            <form id="contactForm" class="contact-form" style="display:none;">
+                <div class="form-row">
+                    <label class="field-group">
+                        <span>First Name</span>
+                        <input name="firstName" type="text" required>
+                    </label>
+                    <label class="field-group">
+                        <span>Last Name</span>
+                        <input name="lastName" type="text" required>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label class="field-group">
+                        <span>Email</span>
+                        <input name="email" type="email" required>
+                    </label>
+                    <label class="field-group">
+                        <span>Favorite Color</span>
+                        <input name="favoriteColor" type="text" required>
+                    </label>
+                </div>
+                <div class="form-row single">
+                    <label class="field-group">
+                        <span>Birthday</span>
+                        <input name="birthday" type="date" required>
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button class="primary-btn" type="submit">Save Contact</button>
+                    <button class="secondary-btn" type="button" id="cancelContactForm">Cancel</button>
+                </div>
+            </form>
             <div id="contactsGrid" class="contacts-grid">
                 <!-- Contact cards will be injected here by script.js -->
             </div>
