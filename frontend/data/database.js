@@ -11,8 +11,11 @@ const isLocal =
   window.location.hostname === '127.0.0.1' ||
   window.location.protocol === 'file:';
 
+// Prefer an injected runtime config (set window.__API_URL__ in index.html when deploying).
+// Fallback to localhost in dev; otherwise use empty string (not recommended for static hosts).
 const BASE_URL =
-  isLocal && window.location.port !== '8080' ? 'http://localhost:8080' : '';
+  window.__API_URL__ ||
+  (isLocal && window.location.port !== '8080' ? 'http://localhost:8080' : '');
 
 /**
  * Generic fetch helper -calls the API and returns parsed JSON.
