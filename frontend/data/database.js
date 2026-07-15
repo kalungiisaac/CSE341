@@ -70,6 +70,15 @@ async function getAllContacts() {
 }
 
 /**
+ * Fetch all professional profiles from the live database.
+ * Endpoint: GET /professional/all
+ * @returns {Promise<Array>} Array of professional profile objects
+ */
+async function getAllProfessionalProfiles() {
+  return apiFetch('/professional/all');
+}
+
+/**
  * Fetch a single contact by its MongoDB ObjectId.
  * Endpoint: GET /contacts/:id
  * @param {string} id - The contact's ObjectId
@@ -97,6 +106,7 @@ async function createContact(contact) {
 window.Database = {
   getProfessionalData,
   getAllContacts,
+  getAllProfessionalProfiles,
   getContactById,
   createContact,
 };

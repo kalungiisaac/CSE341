@@ -13,3 +13,12 @@ Don't forget to create the .env file. If you are unsure of how to do this, watch
 ### Video Walkthrough
 
 [Video Explanation of Stretch Assignment](https://youtu.be/S25ggtvC4AM)
+
+## Project Status (W03 Part 1)
+
+- **CRUD implemented:** `contacts` and `professional` collections have GET, POST, PUT, DELETE routes.
+- **Validation:** POST and PUT routes validate input and return `400` on bad input.
+- **Error handling:** All routes use try/catch and return `400`/`500` as appropriate.
+- **API docs:** Swagger exposed at `/api-docs` via `swagger.json`.
+
+Create a `.env` file locally with your MongoDB connection string before running the server. See `.env.example`.

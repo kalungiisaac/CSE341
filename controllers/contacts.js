@@ -1,7 +1,5 @@
 const mongodb = require('../db/connect');
 const ObjectId = require('mongodb').ObjectId;
-const fs = require('fs');
-const path = require('path');
 
 const getAll = async (req, res) => {
   try {
@@ -10,8 +8,8 @@ const getAll = async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json(contacts);
   } catch (err) {
-    console.warn('Database access failed for contacts. Falling back to local contacts.json file.');
-    sendLocalContacts(res);
+    console.error('Failed to retrieve contacts:', err);
+    res.status(500).json({ message: 'Failed to retrieve contacts.' });
   }
 };
 
@@ -33,8 +31,8 @@ const getSingle = async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json(contacts[0]);
   } catch (err) {
-    console.warn('Database access failed for a single contact. Falling back to local contacts.json file.');
-    sendLocalContactById(req, res);
+    console.error('Failed to retrieve contact:', err);
+    res.status(500).json({ message: 'Failed to retrieve contact.' });
   }
 };
 
@@ -47,8 +45,9 @@ const createContact = async (req, res) => {
     birthday: req.body.birthday,
   };
 
-  if (!contact.firstName || !contact.lastName || !contact.email || !contact.favoriteColor || !contact.birthday) {
-    return res.status(400).json({ message: 'All contact fields are required.' });
+  const validationMessage = validateContact(contact);
+  if (validationMessage) {
+    return res.status(400).json({ message: validationMessage });
   }
 
   try {
@@ -79,8 +78,9 @@ const updateContact = async (req, res) => {
     birthday: req.body.birthday,
   };
 
-  if (!contact.firstName || !contact.lastName || !contact.email || !contact.favoriteColor || !contact.birthday) {
-    return res.status(400).json({ message: 'All contact fields are required.' });
+  const validationMessage = validateContact(contact);
+  if (validationMessage) {
+    return res.status(400).json({ message: validationMessage });
   }
 
   try {
@@ -126,44 +126,34 @@ const deleteContact = async (req, res) => {
   }
 };
 
-function sendLocalContacts(res) {
-  const filePath = path.join(__dirname, '../contacts.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Failed to read local contacts.json:', err);
-      return res.status(500).json({ message: 'Error reading local contacts data.' });
-    }
-    try {
-      const contacts = JSON.parse(data);
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(contacts);
-    } catch (jsonErr) {
-      console.error('Error parsing contacts.json:', jsonErr);
-      res.status(500).json({ message: 'Error parsing local contacts data.' });
-    }
-  });
-}
+function validateContact(contact) {
+  if (!contact || typeof contact !== 'object') {
+    return 'Contact payload must be an object.';
+  }
 
-function sendLocalContactById(req, res) {
-  const filePath = path.join(__dirname, '../contacts.json');
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Failed to read local contacts.json:', err);
-      return res.status(500).json({ message: 'Error reading local contacts data.' });
+  const requiredFields = ['firstName', 'lastName', 'email', 'favoriteColor', 'birthday'];
+  for (const field of requiredFields) {
+    if (!contact[field] || typeof contact[field] !== 'string' || contact[field].trim() === '') {
+      return `${field} is required.`;
     }
-    try {
-      const contacts = JSON.parse(data);
-      const contact = contacts.find((item) => item._id.toString() === req.params.id);
-      if (!contact) {
-        return res.status(404).json({ message: 'Contact not found.' });
-      }
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(contact);
-    } catch (jsonErr) {
-      console.error('Error parsing contacts.json:', jsonErr);
-      res.status(500).json({ message: 'Error parsing local contacts data.' });
-    }
-  });
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(contact.email.trim())) {
+    return 'email must be a valid email address.';
+  }
+
+  const birthdayPattern = /^\d{4}-\d{2}-\d{2}$/;
+  if (!birthdayPattern.test(contact.birthday.trim())) {
+    return 'birthday must use YYYY-MM-DD format.';
+  }
+
+  const birthdayDate = new Date(`${contact.birthday.trim()}T00:00:00Z`);
+  if (Number.isNaN(birthdayDate.getTime())) {
+    return 'birthday must be a valid date.';
+  }
+
+  return null;
 }
 
 module.exports = { getAll, getSingle, createContact, updateContact, deleteContact };

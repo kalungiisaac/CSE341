@@ -33,8 +33,13 @@
         </header>
 
         <main class="content">
+
             <div class="toolbar">
                 <button id="toggleContactForm" class="primary-btn" type="button">+ Add Contact</button>
+                <button id="viewUsersButton" class="secondary-btn" type="button"><i class="fas fa-users"></i> View All
+                    User Info</button>
+                <button id="backToContactsButton" class="secondary-btn" type="button" style="display:none;"><i
+                        class="fas fa-arrow-left"></i> Back to Contacts</button>
                 <p id="formMessage" class="form-message" aria-live="polite"></p>
             </div>
             <form id="contactForm" class="contact-form" style="display:none;">
@@ -71,6 +76,9 @@
             </form>
             <div id="contactsGrid" class="contacts-grid">
                 <!-- Contact cards will be injected here by script.js -->
+            </div>
+            <div id="usersGrid" class="contacts-grid" style="display:none;">
+                <!-- User cards will be injected here by script.js -->
             </div>
             <div id="loadingState" class="loading-state">
                 <div class="spinner"></div>

@@ -36,3 +36,69 @@ GET http://localhost:8080/api-docs
 
 ### Professional data (existing)
 GET http://localhost:8080/professional
+
+###
+
+### Get a single professional profile by ID
+GET http://localhost:8080/professional/621fe1f527d68ebb24438395
+
+###
+
+### Create a new professional profile
+POST http://localhost:8080/professional
+Content-Type: application/json
+
+{
+  "professionalName": "Example Professional",
+  "nameLink": {
+    "firstName": "Example",
+    "url": "https://example.com"
+  },
+  "base64Image": "",
+  "primaryDescription": "A short description.",
+  "workDescription1": "First work description.",
+  "workDescription2": "Second work description.",
+  "linkTitleText": "See more",
+  "linkedInLink": {
+    "link": "https://www.linkedin.com",
+    "text": "LinkedIn"
+  },
+  "githubLink": {
+    "link": "https://github.com",
+    "text": "GitHub"
+  },
+  "contactText": "Contact me at example@example.com"
+}
+
+###
+
+### Update a professional profile
+PUT http://localhost:8080/professional/621fe1f527d68ebb24438395
+Content-Type: application/json
+
+{
+  "professionalName": "Updated Professional",
+  "nameLink": {
+    "firstName": "Updated",
+    "url": "https://updated.example.com"
+  },
+  "base64Image": "",
+  "primaryDescription": "An updated description.",
+  "workDescription1": "Updated work description one.",
+  "workDescription2": "Updated work description two.",
+  "linkTitleText": "See updated work",
+  "linkedInLink": {
+    "link": "https://www.linkedin.com/in/updated",
+    "text": "LinkedIn"
+  },
+  "githubLink": {
+    "link": "https://github.com/updated",
+    "text": "GitHub"
+  },
+  "contactText": "Reach out at updated@example.com"
+}
+
+###
+
+### Delete a professional profile
+DELETE http://localhost:8080/professional/621fe1f527d68ebb24438395

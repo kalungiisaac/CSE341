@@ -11,6 +11,12 @@ const app = express();
 
 app
   .use(bodyParser.json())
+  .use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+      return res.status(400).json({ message: 'Request body must be valid JSON.' });
+    }
+    next(err);
+  })
   .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -22,7 +28,7 @@ app
   .use('/', routes);
 
 // Initialize DB and start server
-mongodb.initDb((err, mongodbInstance) => {
+mongodb.initDb((err) => {
   if (err) {
     console.warn('Warning: Could not connect to MongoDB Atlas. Continuing with fallback data.');
     console.error(err);
@@ -30,7 +36,15 @@ mongodb.initDb((err, mongodbInstance) => {
     console.log('Connected to MongoDB Atlas successfully.');
   }
 
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Web Server is listening at port ${port}`);
+  });
+
+  server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+      console.error(`Port ${port} is already in use. Please stop the existing process or set PORT to a different value.`);
+      process.exit(1);
+    }
+    throw error;
   });
 });
