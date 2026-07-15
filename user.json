@@ -118,5 +118,125 @@
       "text": "GitHub"
     },
     "contactText": "Reach Emma at lujja24@outlook.com for learning projects and collaboration."
+  },
+  {
+    "_id": {
+      "$oid": "6696541d27d68ebb2443839a"
+    },
+    "professionalName": "Sarah Johnson",
+    "nameLink": {
+      "firstName": "Sarah",
+      "url": "https://github.com/sarahjohnson"
+    },
+    "base64Image": "images/image.jpg",
+    "primaryDescription": "Sarah Johnson is a UI/UX designer with a passion for creating intuitive and visually appealing user interfaces.",
+    "workDescription1": "She specializes in wireframing, prototyping, and user research.",
+    "workDescription2": "She has worked with Figma, Adobe XD, and Sketch to deliver design systems.",
+    "linkTitleText": "Check out Sarah portfolio and designs.",
+    "linkedInLink": {
+      "link": "https://www.linkedin.com/in/sarahjohnson/",
+      "text": "LinkedIn"
+    },
+    "githubLink": {
+      "link": "https://github.com/sarahjohnson",
+      "text": "GitHub"
+    },
+    "contactText": "Contact Sarah at sarah.johnson@email.com for design collaborations."
+  },
+  {
+    "_id": {
+      "$oid": "6696541d27d68ebb2443839b"
+    },
+    "professionalName": "Michael Chen",
+    "nameLink": {
+      "firstName": "Michael",
+      "url": "https://github.com/michaelchen"
+    },
+    "base64Image": "images/image.jpg",
+    "primaryDescription": "Michael Chen is a DevOps engineer focused on CI/CD pipelines, containerization, and cloud infrastructure.",
+    "workDescription1": "He works with Docker, Kubernetes, and AWS to automate deployments.",
+    "workDescription2": "He has experience setting up monitoring, logging, and security best practices.",
+    "linkTitleText": "Follow Michael technical journey.",
+    "linkedInLink": {
+      "link": "https://www.linkedin.com/in/michaelchen/",
+      "text": "LinkedIn"
+    },
+    "githubLink": {
+      "link": "https://github.com/michaelchen",
+      "text": "GitHub"
+    },
+    "contactText": "Reach Michael at michael.chen@email.com for DevOps consulting."
+  },
+  {
+    "_id": {
+      "$oid": "6696541d27d68ebb2443839c"
+    },
+    "professionalName": "Emily Rodriguez",
+    "nameLink": {
+      "firstName": "Emily",
+      "url": "https://github.com/emilyrodriguez"
+    },
+    "base64Image": "images/image.jpg",
+    "primaryDescription": "Emily Rodriguez is a mobile app developer building cross-platform applications with React Native and Flutter.",
+    "workDescription1": "She develops responsive mobile interfaces and integrates REST APIs.",
+    "workDescription2": "She focuses on app performance, accessibility, and smooth user experiences.",
+    "linkTitleText": "Explore Emily mobile projects.",
+    "linkedInLink": {
+      "link": "https://www.linkedin.com/in/emilyrodriguez/",
+      "text": "LinkedIn"
+    },
+    "githubLink": {
+      "link": "https://github.com/emilyrodriguez",
+      "text": "GitHub"
+    },
+    "contactText": "Contact Emily at emily.rodriguez@email.com for mobile development work."
+  },
+  {
+    "_id": {
+      "$oid": "6696541d27d68ebb2443839d"
+    },
+    "professionalName": "David Kim",
+    "nameLink": {
+      "firstName": "David",
+      "url": "https://github.com/davidkim"
+    },
+    "base64Image": "images/image.jpg",
+    "primaryDescription": "David Kim is a data analyst who transforms raw data into actionable insights using Python and SQL.",
+    "workDescription1": "He builds dashboards, reports, and data visualizations.",
+    "workDescription2": "He has experience with pandas, matplotlib, and business intelligence tools.",
+    "linkTitleText": "View David data projects.",
+    "linkedInLink": {
+      "link": "https://www.linkedin.com/in/davidkim/",
+      "text": "LinkedIn"
+    },
+    "githubLink": {
+      "link": "https://github.com/davidkim",
+      "text": "GitHub"
+    },
+    "contactText": "Reach David at david.kim@email.com for data analysis projects."
+  },
+  {
+    "_id": {
+      "$oid": "6696541d27d68ebb2443839e"
+    },
+    "professionalName": "Olivia Martinez",
+    "nameLink": {
+      "firstName": "Olivia",
+      "url": "https://github.com/oliviamartinez"
+    },
+    "base64Image": "images/image.jpg",
+    "primaryDescription": "Olivia Martinez is a cybersecurity analyst dedicated to protecting systems and networks from threats.",
+    "workDescription1": "She conducts vulnerability assessments and penetration testing.",
+    "workDescription2": "She implements security protocols and monitors for suspicious activity.",
+    "linkTitleText": "Follow Olivia security insights.",
+    "linkedInLink": {
+      "link": "https://www.linkedin.com/in/oliviamartinez/",
+      "text": "LinkedIn"
+    },
+    "githubLink": {
+      "link": "https://github.com/oliviamartinez",
+      "text": "GitHub"
+    },
+    "contactText": "Contact Olivia at olivia.martinez@email.com for security consultations."
   }
 ]
