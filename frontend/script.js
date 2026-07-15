@@ -70,7 +70,7 @@ function buildContactCard(contact, index) {
   const colorCSS = resolveColor(contact.favoriteColor);
 
   return `
-    <article class="contact-card" id="contact-${contact._id || index}">
+    <article class="contact-card scroll-reveal" id="contact-${contact._id || index}">
       <div class="card-avatar" style="background: ${gradient};">${initials}</div>
       <h2 class="card-name">${contact.firstName} ${contact.lastName}</h2>
       <p class="card-email"><a href="mailto:${contact.email}">${contact.email}</a></p>
@@ -158,7 +158,7 @@ function buildUserCard(profile, index) {
   const hasImage = Boolean(imageSrc);
 
   return `
-    <article class="contact-card user-card" id="user-${profile._id || index}">
+    <article class="contact-card user-card scroll-reveal" id="user-${profile._id || index}">
       <div class="user-image-wrap" style="--avatar-bg: ${gradient};">
         ${hasImage ? `<img class="profile-image" src="${escapeHtml(imageSrc)}" alt="${nameValue}" loading="lazy" decoding="async">` : `<div class="card-avatar">${(nameValue[0] || 'U').toUpperCase()}</div>`}
       </div>
@@ -351,3 +351,28 @@ contactForm.addEventListener('submit', handleAddContact);
 // Kick off
 loadProfessionalProfile();
 loadContacts();
+
+// Scroll reveal — animate cards as they enter / leave the viewport
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+      } else {
+        entry.target.classList.remove('revealed');
+      }
+    });
+  },
+  { threshold: 0.1 }
+);
+
+function observeScrollReveal() {
+  document.querySelectorAll('.scroll-reveal:not(.revealed)').forEach((el) => {
+    revealObserver.observe(el);
+  });
+}
+
+// Re-observe whenever new cards are added
+const mutationObs = new MutationObserver(() => observeScrollReveal());
+mutationObs.observe(contactsGrid, { childList: true });
+mutationObs.observe(usersGrid, { childList: true });

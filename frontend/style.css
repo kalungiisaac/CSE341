@@ -184,6 +184,18 @@ img {
   }
 }
 
+/* Scroll reveal animation */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (max-width: 300px) {
   html {
     font-size: 70%;
