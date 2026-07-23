@@ -1,10 +1,27 @@
 const mongodb = require('../db/connect');
-const ObjectId = require('mongodb').ObjectId;
+const { ObjectId } = require('mongodb');
+const fallbackData = require('../db/fallbackData');
+
+function getCollection() {
+  try {
+    return mongodb.getDb().db('cse341').collection('user');
+  } catch (error) {
+    return null;
+  }
+}
 
 const getData = async (req, res) => {
   try {
-    const db = mongodb.getDb();
-    const profiles = await db.db('cse341').collection('user').find().toArray();
+    const collection = getCollection();
+    if (!collection) {
+      if (fallbackData.professionalProfiles && fallbackData.professionalProfiles.length > 0) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json(fallbackData.professionalProfiles[0]);
+      }
+      return res.status(404).json({ message: 'Professional profile not found.' });
+    }
+
+    const profiles = await collection.find().toArray();
     if (profiles && profiles.length > 0) {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(profiles[0]);
@@ -18,8 +35,13 @@ const getData = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const db = mongodb.getDb();
-    const profiles = await db.db('cse341').collection('user').find().toArray();
+    const collection = getCollection();
+    if (!collection) {
+      res.setHeader('Content-Type', 'application/json');
+      return res.status(200).json(fallbackData.professionalProfiles);
+    }
+
+    const profiles = await collection.find().toArray();
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json(profiles);
   } catch (error) {
@@ -33,8 +55,18 @@ const getSingle = async (req, res) => {
       return res.status(400).json({ message: 'Invalid professional profile ID format.' });
     }
 
+    const collection = getCollection();
+    if (!collection) {
+      const fallbackProfile = fallbackData.professionalProfiles.find((profile) => profile._id?.toString() === req.params.id);
+      if (!fallbackProfile) {
+        return res.status(404).json({ message: 'Professional profile not found.' });
+      }
+      res.setHeader('Content-Type', 'application/json');
+      return res.status(200).json(fallbackProfile);
+    }
+
     const profileId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db('cse341').collection('user').find({ _id: profileId });
+    const result = await collection.find({ _id: profileId });
     const profiles = await result.toArray();
 
     if (profiles.length === 0) {
@@ -68,7 +100,15 @@ const createProfessional = async (req, res) => {
   }
 
   try {
-    const result = await mongodb.getDb().db('cse341').collection('user').insertOne(profile);
+    const collection = getCollection();
+    if (!collection) {
+      const newProfile = { ...profile, _id: `fallback-profile-${Date.now()}` };
+      fallbackData.professionalProfiles.push(newProfile);
+      res.setHeader('Content-Type', 'application/json');
+      return res.status(201).json({ message: 'Professional profile created successfully.', id: newProfile._id });
+    }
+
+    const result = await collection.insertOne(profile);
     res.setHeader('Content-Type', 'application/json');
     res.status(201).json({ message: 'Professional profile created successfully.', id: result.insertedId });
   } catch (error) {
@@ -100,8 +140,18 @@ const updateProfessional = async (req, res) => {
   }
 
   try {
+    const collection = getCollection();
+    if (!collection) {
+      const index = fallbackData.professionalProfiles.findIndex((item) => item._id?.toString() === req.params.id);
+      if (index === -1) {
+        return res.status(404).json({ message: 'Professional profile not found.' });
+      }
+      fallbackData.professionalProfiles[index] = { ...fallbackData.professionalProfiles[index], ...profile };
+      return res.status(204).send();
+    }
+
     const profileId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db('cse341').collection('user').replaceOne({ _id: profileId }, profile);
+    const result = await collection.replaceOne({ _id: profileId }, profile);
 
     if (result.matchedCount === 0) {
       return res.status(404).json({ message: 'Professional profile not found.' });
@@ -119,8 +169,18 @@ const deleteProfessional = async (req, res) => {
   }
 
   try {
+    const collection = getCollection();
+    if (!collection) {
+      const index = fallbackData.professionalProfiles.findIndex((item) => item._id?.toString() === req.params.id);
+      if (index === -1) {
+        return res.status(404).json({ message: 'Professional profile not found.' });
+      }
+      fallbackData.professionalProfiles.splice(index, 1);
+      return res.status(204).send();
+    }
+
     const profileId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db('cse341').collection('user').deleteOne({ _id: profileId });
+    const result = await collection.deleteOne({ _id: profileId });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Professional profile not found.' });

@@ -1,5 +1,6 @@
 const express = require('express');
 const professionalController = require('../controllers/professional');
+const { requireAuth } = require('../auth');
 
 const router = express.Router();
 
@@ -13,12 +14,12 @@ router.get('/all', professionalController.getAll);
 router.get('/:id', professionalController.getSingle);
 
 // POST /professional - creates a new professional profile
-router.post('/', professionalController.createProfessional);
+router.post('/', requireAuth, professionalController.createProfessional);
 
 // PUT /professional/:id - updates an existing professional profile
-router.put('/:id', professionalController.updateProfessional);
+router.put('/:id', requireAuth, professionalController.updateProfessional);
 
 // DELETE /professional/:id - deletes a professional profile
-router.delete('/:id', professionalController.deleteProfessional);
+router.delete('/:id', requireAuth, professionalController.deleteProfessional);
 
 module.exports = router;

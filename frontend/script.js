@@ -13,6 +13,7 @@ const cancelContactFormButton = document.getElementById('cancelContactForm');
 const formMessage = document.getElementById('formMessage');
 const professionalCard = document.getElementById('professionalCard');
 const professionalLinks = document.getElementById('professionalLinks');
+const authLink = document.getElementById('authLink');
 let showingUsers = false;
 
 // Color name → CSS color mapping for the swatch
@@ -208,6 +209,27 @@ function buildUserCard(profile, index) {
 /**
  * Main: fetch contacts from the live database and render them.
  */
+async function updateAuthUI() {
+  if (!authLink) return;
+
+  try {
+    const response = await fetch('/auth/status');
+    const data = await response.json();
+
+    if (data.authenticated) {
+      authLink.href = '/auth/logout';
+      authLink.innerHTML = '<i class="fab fa-github" style="margin-right:0.5rem;"></i>Log out';
+      authLink.style.background = '#dc2626';
+    } else {
+      authLink.href = '/auth/login';
+      authLink.innerHTML = '<i class="fab fa-github" style="margin-right:0.5rem;"></i>Log in with GitHub';
+      authLink.style.background = '#2563eb';
+    }
+  } catch (error) {
+    console.error('Failed to fetch auth status:', error);
+  }
+}
+
 async function loadProfessionalProfile() {
   try {
     const profile = await Database.getProfessionalData();
@@ -349,6 +371,7 @@ cancelContactFormButton.addEventListener('click', () => toggleContactForm(false)
 contactForm.addEventListener('submit', handleAddContact);
 
 // Kick off
+updateAuthUI();
 loadProfessionalProfile();
 loadContacts();
 

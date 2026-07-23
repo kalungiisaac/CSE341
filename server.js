@@ -5,9 +5,13 @@ const mongodb = require('./db/connect');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const routes = require('./routes');
+const passport = require('passport');
+const { configureAuth, getAuthStatus } = require('./auth');
 
 const port = process.env.PORT || 8080;
 const app = express();
+
+const getCallbackUrl = (req) => process.env.CALLBACK_URL || `${req.protocol}://${req.get('host')}/auth/github/callback`;
 
 app
   .use(bodyParser.json())
@@ -24,7 +28,37 @@ app
     next();
   })
   .use(express.static(path.join(__dirname, 'frontend')))
-  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+configureAuth(app);
+
+app
+  .get('/auth/status', getAuthStatus)
+  .get('/auth/login', (req, res, next) => {
+    passport.authenticate('github', {
+      scope: ['user:email'],
+      callbackURL: getCallbackUrl(req),
+    })(req, res, next);
+  })
+  .get('/auth/github/callback', (req, res, next) => {
+    passport.authenticate('github', {
+      failureRedirect: '/auth/failure',
+      callbackURL: getCallbackUrl(req),
+    })(req, res, next);
+  }, (req, res) => {
+    res.redirect('/');
+  })
+  .get('/auth/failure', (req, res) => {
+    res.status(401).json({ message: 'Authentication failed.' });
+  })
+  .get('/auth/logout', (req, res, next) => {
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.redirect('/');
+    });
+  })
   .use('/', routes);
 
 // Initialize DB and start server

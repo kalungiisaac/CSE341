@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "CSE341 Project 2 API",
+    "title": "CSE341 Project API",
     "version": "1.0.0",
     "description": "CRUD API for two MongoDB collections: contacts and professional profiles. Built for W03 Project 2 Part 1 with validation, error handling, and Swagger testing."
   },
@@ -18,11 +18,15 @@
   "tags": [
     {
       "name": "Contacts",
-      "description": "CRUD operations for the contacts collection."
+      "description": "CRUD operations for the contacts collection. Protected write routes require authentication."
     },
     {
       "name": "Professional",
-      "description": "CRUD operations for the user/professional collection."
+      "description": "CRUD operations for the user/professional collection. Protected write routes require authentication."
+    },
+    {
+      "name": "Authentication",
+      "description": "GitHub OAuth login, logout, and authentication status endpoints."
     }
   ],
   "paths": {
@@ -43,6 +47,7 @@
                     "$ref": "#/components/schemas/Contact"
                   }
                 }
+                
               }
             }
           },
@@ -68,6 +73,11 @@
           "Contacts"
         ],
         "summary": "Create a contact",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -210,6 +220,11 @@
           "Contacts"
         ],
         "summary": "Update a contact",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -287,6 +302,11 @@
           "Contacts"
         ],
         "summary": "Delete a contact",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -389,6 +409,11 @@
           "Professional"
         ],
         "summary": "Create a professional profile",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -569,6 +594,11 @@
           "Professional"
         ],
         "summary": "Update a professional profile",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -646,6 +676,11 @@
           "Professional"
         ],
         "summary": "Delete a professional profile",
+        "security": [
+          {
+            "githubOAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -708,9 +743,77 @@
           }
         }
       }
+    },
+    "/auth/status": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get authentication status",
+        "responses": {
+          "200": {
+            "description": "Current authentication state.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "authenticated": {
+                      "type": "boolean"
+                    },
+                    "user": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Start GitHub OAuth login",
+        "responses": {
+          "302": {
+            "description": "Redirects to GitHub for authentication."
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Log out the current user",
+        "responses": {
+          "302": {
+            "description": "Redirects to the home page."
+          }
+        }
+      }
     }
   },
   "components": {
+    "securitySchemes": {
+      "githubOAuth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://github.com/login/oauth/authorize",
+            "tokenUrl": "https://github.com/login/oauth/access_token",
+            "scopes": {
+              "user:email": "Access your GitHub profile"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "Contact": {
         "type": "object",
