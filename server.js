@@ -48,7 +48,40 @@ app
     next();
   })
   .use(express.static(path.join(__dirname, 'frontend')))
-  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      oauth2RedirectUrl: '/api-docs/oauth2-redirect',
+      onComplete: () => {
+        const syncSwaggerAuth = () => {
+          fetch('/auth/status', { credentials: 'same-origin' })
+            .then((response) => {
+              if (!response.ok) return;
+              return response.json();
+            })
+            .then((data) => {
+              if (!data || !data.authenticated || typeof window === 'undefined' || !window.ui) {
+                return;
+              }
+
+              try {
+                if (typeof window.ui.preauthorizeApiKey === 'function') {
+                  window.ui.preauthorizeApiKey('sessionAuth', 'authenticated');
+                }
+              } catch (error) {
+                console.warn('Unable to sync Swagger auth state:', error);
+              }
+            })
+            .catch((error) => {
+              console.warn('Unable to check auth status for Swagger:', error);
+            });
+        };
+
+        syncSwaggerAuth();
+        window.addEventListener('focus', syncSwaggerAuth);
+      },
+    },
+  }));
 
 configureAuth(app);
 

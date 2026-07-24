@@ -811,6 +811,11 @@
             }
           }
         }
+      },
+      "sessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "connect.sid"
       }
     },
     "schemas": {
