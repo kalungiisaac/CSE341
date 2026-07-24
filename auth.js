@@ -27,7 +27,7 @@ function configureAuth(app) {
         {
           clientID: process.env.GITHUB_CLIENT_ID,
           clientSecret: process.env.GITHUB_CLIENT_SECRET,
-          callbackURL: process.env.CALLBACK_URL || 'http://localhost:8080/auth/github/callback',
+          callbackURL: process.env.CALLBACK_URL || '/auth/github/callback',
         },
         (accessToken, refreshToken, profile, done) => done(null, profile)
       )
