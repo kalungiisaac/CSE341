@@ -11,6 +11,8 @@ const { configureAuth, getAuthStatus } = require('./auth');
 const port = process.env.PORT || 8080;
 const app = express();
 
+app.set('trust proxy', 1);
+
 const getCallbackUrl = (req) => {
   const configuredUrl = process.env.CALLBACK_URL;
 

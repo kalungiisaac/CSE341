@@ -27,9 +27,11 @@ function configureAuth(app) {
       secret: process.env.SESSION_SECRET || 'cse341-secret',
       resave: false,
       saveUninitialized: false,
+      proxy: true,
       cookie: {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
       },
     })
   );

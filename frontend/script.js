@@ -213,7 +213,11 @@ async function updateAuthUI() {
   if (!authLink) return;
 
   try {
-    const response = await fetch('/auth/status');
+    const response = await fetch('/auth/status', { credentials: 'same-origin' });
+    if (!response.ok) {
+      throw new Error(`Auth status request failed with ${response.status}`);
+    }
+
     const data = await response.json();
 
     if (data.authenticated) {
@@ -374,6 +378,7 @@ contactForm.addEventListener('submit', handleAddContact);
 updateAuthUI();
 loadProfessionalProfile();
 loadContacts();
+window.addEventListener('focus', updateAuthUI);
 
 // Scroll reveal — animate cards as they enter / leave the viewport
 const revealObserver = new IntersectionObserver(
