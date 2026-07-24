@@ -3,6 +3,24 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const session = require('express-session');
 require('dotenv').config();
 
+function normalizeCallbackUrl(configuredUrl) {
+  if (!configuredUrl) {
+    return '/auth/github/callback';
+  }
+
+  const trimmedUrl = configuredUrl.trim();
+
+  if (trimmedUrl.endsWith('/auth/login')) {
+    return trimmedUrl.replace(/\/auth\/login$/, '/auth/github/callback');
+  }
+
+  if (trimmedUrl.endsWith('/auth/github/callback')) {
+    return trimmedUrl;
+  }
+
+  return `${trimmedUrl.replace(/\/$/, '')}/auth/github/callback`;
+}
+
 function configureAuth(app) {
   app.use(
     session({
@@ -27,7 +45,7 @@ function configureAuth(app) {
         {
           clientID: process.env.GITHUB_CLIENT_ID,
           clientSecret: process.env.GITHUB_CLIENT_SECRET,
-          callbackURL: process.env.CALLBACK_URL || '/auth/github/callback',
+          callbackURL: normalizeCallbackUrl(process.env.CALLBACK_URL),
         },
         (accessToken, refreshToken, profile, done) => done(null, profile)
       )

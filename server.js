@@ -11,7 +11,25 @@ const { configureAuth, getAuthStatus } = require('./auth');
 const port = process.env.PORT || 8080;
 const app = express();
 
-const getCallbackUrl = (req) => process.env.CALLBACK_URL || `${req.protocol}://${req.get('host')}/auth/github/callback`;
+const getCallbackUrl = (req) => {
+  const configuredUrl = process.env.CALLBACK_URL;
+
+  if (!configuredUrl) {
+    return `${req.protocol}://${req.get('host')}/auth/github/callback`;
+  }
+
+  const trimmedUrl = configuredUrl.trim();
+
+  if (trimmedUrl.endsWith('/auth/login')) {
+    return trimmedUrl.replace(/\/auth\/login$/, '/auth/github/callback');
+  }
+
+  if (trimmedUrl.endsWith('/auth/github/callback')) {
+    return trimmedUrl;
+  }
+
+  return `${trimmedUrl.replace(/\/$/, '')}/auth/github/callback`;
+};
 
 app
   .use(bodyParser.json())
